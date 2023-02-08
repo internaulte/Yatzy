@@ -1,9 +1,14 @@
+package modules.yatzyAsCollection;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.counting;
 
 public class Yatzy {
 
@@ -46,45 +51,40 @@ public class Yatzy {
     }
 
     public static int pair(final int d1, final int d2, final int d3, final int d4, final int d5) {
-        final Set<Integer> allItems = new HashSet<>();
-        final int maxPairValueOrZero = IntStream.of(d1, d2, d3, d4, d5).filter(n -> !allItems.add(n)).max().orElse(0);
+        final int maxPairValueOrZero = getDuplicatedValues(d1, d2, d3, d4, d5).max().orElse(0);
 
         return maxPairValueOrZero * 2;
     }
 
     public static int two_pairs(final int d1, final int d2, final int d3, final int d4, final int d5) {
-        final Set<Integer> allItems = new HashSet<>();
-        final Set<Integer> allPairsValues = IntStream.of(d1, d2, d3, d4, d5).boxed().filter(n -> !allItems.add(n)).collect(Collectors.toSet());
+        final Set<Integer> allPairsValues = getDuplicatedValues(d1, d2, d3, d4, d5).boxed().collect(Collectors.toSet());
 
         return allPairsValues.size() == 2 ? allPairsValues.stream().reduce(0, Integer::sum) * 2 : 0;
     }
 
-    public static int three_of_a_kind(int d1, int d2, int d3, int d4, int d5) {
-        int[] t;
-        t = new int[6];
-        t[d1 - 1]++;
-        t[d2 - 1]++;
-        t[d3 - 1]++;
-        t[d4 - 1]++;
-        t[d5 - 1]++;
-        for (int i = 0; i < 6; i++)
-            if (t[i] >= 3)
-                return (i + 1) * 3;
-        return 0;
+    private static IntStream getDuplicatedValues(final int d1, final int d2, final int d3, final int d4, final int d5) {
+        final Set<Integer> allItems = new HashSet<>();
+
+        return IntStream.of(d1, d2, d3, d4, d5).filter(dice -> !allItems.add(dice));
     }
 
-    public static int four_of_a_kind(int _1, int _2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[_1 - 1]++;
-        tallies[_2 - 1]++;
-        tallies[d3 - 1]++;
-        tallies[d4 - 1]++;
-        tallies[d5 - 1]++;
-        for (int i = 0; i < 6; i++)
-            if (tallies[i] >= 4)
-                return (i + 1) * 4;
-        return 0;
+    public static int three_of_a_kind(final int d1, final int d2, final int d3, final int d4, final int d5) {
+        final int maxTriplicatedValue = getTriplicatedValues(d1, d2, d3, d4, d5).max().orElse(0);
+        return maxTriplicatedValue * 3;
+    }
+
+    private static IntStream getTriplicatedValues(final int d1, final int d2, final int d3, final int d4, final int d5) {
+        final Set<Integer> allItems = new HashSet<>();
+        final Set<Integer> duplicatesItems = new HashSet<>();
+
+        return IntStream.of(d1, d2, d3, d4, d5).filter(dice -> !allItems.add(dice) && !duplicatesItems.add(dice));
+    }
+
+    public static int four_of_a_kind(int d1, int d2, int d3, int d4, int d5) {
+        Map<Integer, Long> a = IntStream.of(d1, d2, d3, d4, d5).boxed().collect(Collectors.groupingBy(diceValue -> diceValue, counting()));
+        int toto = a.entrySet().stream().filter(entry -> entry.getValue() >= 4).map(Map.Entry::getKey).max(Integer::compareTo).orElse(0);
+
+        return toto * 4;
     }
 
     public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {

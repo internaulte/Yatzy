@@ -1,3 +1,5 @@
+package modules.yatzyAsCollection;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -96,6 +98,7 @@ public class YatzyTest {
         assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 4, 5));
         assertEquals(0, Yatzy.three_of_a_kind(3, 3, 4, 5, 6));
         assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 3, 1));
+        assertEquals(9, Yatzy.three_of_a_kind(3, 3, 3, 1, 1));
     }
 
     @Test
