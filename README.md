@@ -81,7 +81,7 @@ of a kind”:
 
 When placed on “small straight”, if the dice read
 
-1,2,3,4,5,
+1,2,3,4,5
 
 the player scores 15 (the sum of all the dice).
 
@@ -89,7 +89,7 @@ the player scores 15 (the sum of all the dice).
 
 When placed on “large straight”, if the dice read
 
-2,3,4,5,6,
+2,3,4,5,6
 
 the player scores 20 (the sum of all the dice).
 

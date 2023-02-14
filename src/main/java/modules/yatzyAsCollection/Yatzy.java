@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -80,48 +81,24 @@ public class Yatzy {
         return IntStream.of(d1, d2, d3, d4, d5).filter(dice -> !allItems.add(dice) && !duplicatesItems.add(dice));
     }
 
-    public static int four_of_a_kind(int d1, int d2, int d3, int d4, int d5) {
-        Map<Integer, Long> a = IntStream.of(d1, d2, d3, d4, d5).boxed().collect(Collectors.groupingBy(diceValue -> diceValue, counting()));
-        int toto = a.entrySet().stream().filter(entry -> entry.getValue() >= 4).map(Map.Entry::getKey).max(Integer::compareTo).orElse(0);
+    public static int four_of_a_kind(final int d1, final int d2, final int d3, final int d4, final int d5) {
+        Map<Integer, Long> frequenceOfValues = IntStream.of(d1, d2, d3, d4, d5).boxed().collect(Collectors.groupingBy(diceValue -> diceValue, counting()));
+        int maxValueFourOfKing = frequenceOfValues.entrySet().stream().filter(entry -> entry.getValue() >= 4).map(Map.Entry::getKey).max(Integer::compareTo).orElse(0);
 
-        return toto * 4;
+        return maxValueFourOfKing * 4;
     }
 
-    public static int smallStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[0] == 1 &&
-                tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1)
-            return 15;
-        return 0;
+    public static int smallStraight(final int d1, final int d2, final int d3, final int d4, final int d5) {
+        final Set<Integer> smallStraight = IntStream.of(d1, d2, d3, d4, d5).boxed().collect(Collectors.toUnmodifiableSet());
+        return Objects.equals(smallStraight, Set.of(1, 2, 3, 4, 5)) ? 15 : 0;
     }
 
-    public static int largeStraight(int d1, int d2, int d3, int d4, int d5) {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1 - 1] += 1;
-        tallies[d2 - 1] += 1;
-        tallies[d3 - 1] += 1;
-        tallies[d4 - 1] += 1;
-        tallies[d5 - 1] += 1;
-        if (tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1
-                && tallies[5] == 1)
-            return 20;
-        return 0;
+    public static int largeStraight(final int d1, final int d2, final int d3, final int d4, final int d5) {
+        final Set<Integer> smallStraight = IntStream.of(d1, d2, d3, d4, d5).boxed().collect(Collectors.toUnmodifiableSet());
+        return Objects.equals(smallStraight, Set.of(2, 3, 4, 5, 6)) ? 20 : 0;
     }
 
-    public static int fullHouse(int d1, int d2, int d3, int d4, int d5) {
+    public static int fullHouse(final int d1, final int d2, final int d3, final int d4, final int d5) {
         int[] tallies;
         boolean _2 = false;
         int i;
